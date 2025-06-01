@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "compileCommands": "${workspaceFolder}/build_linux/compile_commands.json"
+        },
+        {
+            "name": "Windows",
+            "compileCommands": "${workspaceFolder}/build_windows/compile_commands.json"
+        },
+        {
+            "name": "Mac",
+            "compileCommands": "${workspaceFolder}/build_macos/compile_commands.json"
+        }
+    ],
+    "version": 4
+}
