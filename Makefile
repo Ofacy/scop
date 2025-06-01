@@ -1,3 +1,8 @@
+# Makefile for building a C++ project with CMake
+# THIS IS REQUIRED BY THE SUBJECT
+# and way of building a cmake project is dumb
+# but I want to use cmake for this project
+
 NAME := scop
 
 ifeq ($(OS),Windows_NT)
