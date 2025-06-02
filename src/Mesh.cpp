@@ -1,12 +1,12 @@
-#include "Model.hpp"
+#include "Mesh.hpp"
 
-Model::Model() {
+Mesh::Mesh() {
 }
 
-Model::~Model() {
+Mesh::~Mesh() {
 }
 
-void Model::addVertex(float x, float y, float z) {
+void Mesh::addVertex(float x, float y, float z) {
 	vertices.push_back({x, y, z});
 	if (vertices.size() == 1) {
 		min = {x, y, z};
@@ -21,19 +21,19 @@ void Model::addVertex(float x, float y, float z) {
 	}
 }
 
-void Model::addIndex(unsigned int index) {
+void Mesh::addIndex(unsigned int index) {
 	indices.push_back(index);
 }
 
-std::vector<Vertex> Model::getVertices() const {
+std::vector<Vertex> Mesh::getVertices() const {
 	return vertices;
 }
 
-std::vector<unsigned int> Model::getIndices() const {
+std::vector<unsigned int> Mesh::getIndices() const {
 	return indices;
 }
 
-float3 Model::getCenter() {
+float3 Mesh::getCenter() {
 	float3 center;
 	center.x = (min.x + max.x) / 2.0f;
 	center.y = (min.y + max.y) / 2.0f;
@@ -41,7 +41,7 @@ float3 Model::getCenter() {
 	return center;
 }
 
-void Model::center() {
+void Mesh::center() {
 	float3 center = getCenter();
 	for (auto &vertex : vertices) {
 		vertex.x -= center.x;

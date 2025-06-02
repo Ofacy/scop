@@ -1,8 +1,8 @@
-#ifndef MODEL_HPP
-#define MODEL_HPP
+#ifndef MESH_HPP
+#define MESH_HPP
 
 #include <vector>
-
+#include "GLContext.hpp"
 
 typedef struct {
 	float x, y, z;
@@ -10,7 +10,7 @@ typedef struct {
 
 typedef float3 Vertex;
 
-class Model {
+class Mesh {
 private:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -18,8 +18,8 @@ private:
 	float3 max;
 	float3 min;
 public:
-	Model();
-	~Model();
+	Mesh();
+	~Mesh();
 
 	void addVertex(float x, float y, float z);
 	void addIndex(unsigned int index);
@@ -27,6 +27,7 @@ public:
 	std::vector<unsigned int> getIndices() const;
 	float3 getCenter();
 	void center();
+	
 };
 
 #endif

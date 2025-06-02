@@ -25,8 +25,8 @@ set(CLASS_NAMES
 	Window
 	Shader
 	ShaderProgram
-	Model
-	ModelLoader
+	Mesh
+	MeshLoader
 	Mat4
 )
 
@@ -36,6 +36,9 @@ list(TRANSFORM SRC_FILES PREPEND ${SRC_DIR}/)
 list(TRANSFORM SRC_FILES APPEND .cpp)
 list(TRANSFORM INC_FILES PREPEND ${INC_DIR}/)
 list(TRANSFORM INC_FILES APPEND .hpp)
+
+# no-pie
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
 
 add_executable(
 	scop

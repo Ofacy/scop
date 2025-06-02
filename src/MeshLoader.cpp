@@ -1,15 +1,15 @@
-#include "ModelLoader.hpp"
+#include "MeshLoader.hpp"
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
 
-Model ModelLoader::loadModel(const std::string& filePath) {
-	Model model;
+Mesh MeshLoader::loadMesh(const std::string& filePath) {
+	Mesh mesh;
 
 	// Open the file
 	std::ifstream file(filePath);
 	if (!file.is_open()) {
-		throw std::runtime_error("Could not open model file: " + filePath);
+		throw std::runtime_error("Could not open mesh file: " + filePath);
 	}
 
 	std::string line;
@@ -21,7 +21,7 @@ Model ModelLoader::loadModel(const std::string& filePath) {
 		if (command == "v") { // Vertex
 			float x, y, z;
 			iss >> x >> y >> z;
-			model.addVertex(x, y, z);
+			mesh.addVertex(x, y, z);
 		} else if (command == "f") { // Face
 			unsigned int index;
 			size_t numIndices = 0;
@@ -34,9 +34,9 @@ Model ModelLoader::loadModel(const std::string& filePath) {
 				} else if (numIndices == 1) {
 					lastIndex = index; // Store the second index
 				} else {
-					model.addIndex(firstIndex);
-					model.addIndex(lastIndex);
-					model.addIndex(index); // Add the third index
+					mesh.addIndex(firstIndex);
+					mesh.addIndex(lastIndex);
+					mesh.addIndex(index); // Add the third index
 					lastIndex = index; // Update last index for next iteration
 				}
 				numIndices++;
@@ -50,6 +50,6 @@ Model ModelLoader::loadModel(const std::string& filePath) {
 	}
 
 	file.close();
-	model.center();
-	return model;
+	mesh.center();
+	return mesh;
 }

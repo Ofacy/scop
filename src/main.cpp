@@ -3,7 +3,7 @@
 #include <chrono>
 #include <cmath>
 #include "Mat4.hpp"
-#include "ModelLoader.hpp"
+#include "MeshLoader.hpp"
 #include "GLContext.hpp"
 #include "ShaderProgram.hpp"
 
@@ -15,14 +15,13 @@ struct final_Vertex {
 int main(int argc, char** argv)
 {
 	if (argc < 2) {
-		std::cerr << "Usage: " << argv[0] << " <model_file>" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " <mesh_file>" << std::endl;
 		return -1;
 	}
-	Model model = ModelLoader::loadModel(argv[1]);
+	Mesh mesh = MeshLoader::loadMesh(argv[1]);
 	GLContext glContext;
 	const Mat4 projectionMatrix(Mat4::perspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f));
 	Mat4 transform;
-	//float3 center = model.getCenter();
 	Mat4 view = Mat4::lookAt(2.2f, 2.2f, 2.2f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
 
 
@@ -51,10 +50,10 @@ int main(int argc, char** argv)
 	glGenBuffers(1, &ebo);
 	
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	const std::vector<Vertex> &vertices = model.getVertices();
+	const std::vector<Vertex> &vertices = mesh.getVertices();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-	const std::vector<unsigned int> &elements = model.getIndices();
+	const std::vector<unsigned int> &elements = mesh.getIndices();
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * elements.size(), elements.data(), GL_STATIC_DRAW);
 
@@ -76,7 +75,6 @@ int main(int argc, char** argv)
 	shaderProgram.setUniformMat4(viewLocation, view);
 	
 	glEnable(GL_DEPTH_TEST);
-	const float3 center = model.getCenter();
 	auto t_start = std::chrono::high_resolution_clock::now();
 	Window& window = glContext.getWindow();
 	while (!window.shouldClose()) {
@@ -87,7 +85,6 @@ int main(int argc, char** argv)
 		auto t_now = std::chrono::high_resolution_clock::now();
 		float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
 		
-		transform.setTranslation(-center.x, -center.y, -center.z);
 		transform.setRotation(time * 30.0f, 0.0f, 1.0f, 0.0f);
 		shaderProgram.setUniformMat4(transformLocation, transform);
 		glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_INT, nullptr);
