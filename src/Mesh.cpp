@@ -7,17 +7,17 @@ Mesh::~Mesh() {
 }
 
 void Mesh::addVertex(float x, float y, float z) {
-	vertices.push_back({x, y, z});
-	if (vertices.size() == 1) {
-		min = {x, y, z};
-		max = {x, y, z};
+	this->vertices.push_back({x, y, z});
+	if (this->vertices.size() == 1) {
+		this->min = {x, y, z};
+		this->max = {x, y, z};
 	} else {
-		min.x = std::min(min.x, x);
-		min.y = std::min(min.y, y);
-		min.z = std::min(min.z, z);
-		max.x = std::max(max.x, x);
-		max.y = std::max(max.y, y);
-		max.z = std::max(max.z, z);
+		this->min.x = std::min(this->min.x, x);
+		this->min.y = std::min(this->min.y, y);
+		this->min.z = std::min(this->min.z, z);
+		this->max.x = std::max(this->max.x, x);
+		this->max.y = std::max(this->max.y, y);
+		this->max.z = std::max(this->max.z, z);
 	}
 }
 
@@ -35,19 +35,19 @@ std::vector<unsigned int> Mesh::getIndices() const {
 
 float3 Mesh::getCenter() {
 	float3 center;
-	center.x = (min.x + max.x) / 2.0f;
-	center.y = (min.y + max.y) / 2.0f;
-	center.z = (min.z + max.z) / 2.0f;
+	center.x = (this->min.x + this->max.x) / 2.0f;
+	center.y = (this->min.y + this->max.y) / 2.0f;
+	center.z = (this->min.z + this->max.z) / 2.0f;
 	return center;
 }
 
 void Mesh::center() {
-	float3 center = getCenter();
-	for (auto &vertex : vertices) {
+	float3 center = this->getCenter();
+	for (auto &vertex : this->vertices) {
 		vertex.x -= center.x;
 		vertex.y -= center.y;
 		vertex.z -= center.z;
 	}
-	min = {0.0f, 0.0f, 0.0f};
-	max = {0.0f, 0.0f, 0.0f};
+	this->min = {0.0f, 0.0f, 0.0f};
+	this->max = {0.0f, 0.0f, 0.0f};
 }

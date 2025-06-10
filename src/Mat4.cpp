@@ -95,7 +95,7 @@ Mat4::Mat4() {
 
 Mat4::Mat4(const Mat4 &other) {
 	for (int i = 0; i < 16; ++i) {
-		elements[i] = other.elements[i];
+		this->elements[i] = other.elements[i];
 	}
 }
 
@@ -106,7 +106,7 @@ Mat4::~Mat4() {
 Mat4 &Mat4::operator=(const Mat4 &other) {
 	if (this != &other) {
 		for (int i = 0; i < 16; ++i) {
-			elements[i] = other.elements[i];
+			this->elements[i] = other.elements[i];
 		}
 	}
 	return *this;
@@ -115,10 +115,10 @@ Mat4 Mat4::operator*(const Mat4 &other) const {
 	Mat4 result;
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
-			result.elements[i * 4 + j] = elements[i * 4 + 0] * other.elements[0 * 4 + j] +
-			                              elements[i * 4 + 1] * other.elements[1 * 4 + j] +
-			                              elements[i * 4 + 2] * other.elements[2 * 4 + j] +
-			                              elements[i * 4 + 3] * other.elements[3 * 4 + j];
+			result.elements[i * 4 + j] = this->elements[i * 4 + 0] * other.elements[0 * 4 + j] +
+			                              this->elements[i * 4 + 1] * other.elements[1 * 4 + j] +
+			                              this->elements[i * 4 + 2] * other.elements[2 * 4 + j] +
+			                              this->elements[i * 4 + 3] * other.elements[3 * 4 + j];
 		}
 	}
 	return result;
@@ -127,7 +127,7 @@ Mat4 Mat4::operator*(const Mat4 &other) const {
 Mat4 Mat4::operator+(const Mat4 &other) const {
 	Mat4 result;
 	for (int i = 0; i < 16; ++i) {
-		result.elements[i] = elements[i] + other.elements[i];
+		result.elements[i] = this->elements[i] + other.elements[i];
 	}
 	return result;
 }
@@ -135,7 +135,7 @@ Mat4 Mat4::operator+(const Mat4 &other) const {
 Mat4 Mat4::operator-(const Mat4 &other) const {
 	Mat4 result;
 	for (int i = 0; i < 16; ++i) {
-		result.elements[i] = elements[i] - other.elements[i];
+		result.elements[i] = this->elements[i] - other.elements[i];
 	}
 	return result;
 }
@@ -143,7 +143,7 @@ Mat4 Mat4::operator-(const Mat4 &other) const {
 Mat4 Mat4::operator*(float scalar) const {
 	Mat4 result;
 	for (int i = 0; i < 16; ++i) {
-		result.elements[i] = elements[i] * scalar;
+		result.elements[i] = this->elements[i] * scalar;
 	}
 	return result;
 }
@@ -154,27 +154,27 @@ Mat4 Mat4::operator/(float scalar) const {
 	}
 	Mat4 result;
 	for (int i = 0; i < 16; ++i) {
-		result.elements[i] = elements[i] / scalar;
+		result.elements[i] = this->elements[i] / scalar;
 	}
 	return result;
 }
 
 void Mat4::setIdentity() {
 	for (int i = 0; i < 16; ++i) {
-		elements[i] = (i % 5 == 0) ? 1.0f : 0.0f;
+		this->elements[i] = (i % 5 == 0) ? 1.0f : 0.0f;
 	}
 }
 
 void Mat4::setZero() {
 	for (int i = 0; i < 16; ++i) {
-		elements[i] = 0.0f;
+		this->elements[i] = 0.0f;
 	}
 }
 
 void Mat4::setTranslation(float x, float y, float z) {
-	elements[12] = x;
-	elements[13] = y;
-	elements[14] = z;
+	this->elements[12] = x;
+	this->elements[13] = y;
+	this->elements[14] = z;
 }
 
 void Mat4::setRotation(float angle, float x, float y, float z) {
@@ -183,28 +183,28 @@ void Mat4::setRotation(float angle, float x, float y, float z) {
 	float s = sin(rad);
 	float oneMinusC = 1.0f - c;
 
-	elements[0] = x * x * oneMinusC + c;
-	elements[1] = x * y * oneMinusC - z * s;
-	elements[2] = x * z * oneMinusC + y * s;
-	elements[3] = 0.0f;
+	this->elements[0] = x * x * oneMinusC + c;
+	this->elements[1] = x * y * oneMinusC - z * s;
+	this->elements[2] = x * z * oneMinusC + y * s;
+	this->elements[3] = 0.0f;
 
-	elements[4] = y * x * oneMinusC + z * s;
-	elements[5] = y * y * oneMinusC + c;
-	elements[6] = y * z * oneMinusC - x * s;
-	elements[7] = 0.0f;
+	this->elements[4] = y * x * oneMinusC + z * s;
+	this->elements[5] = y * y * oneMinusC + c;
+	this->elements[6] = y * z * oneMinusC - x * s;
+	this->elements[7] = 0.0f;
 
-	elements[8] = z * x * oneMinusC - y * s;
-	elements[9] = z * y * oneMinusC + x * s;
-	elements[10] = z * z * oneMinusC + c;
-	elements[11] = 0.0f;
+	this->elements[8] = z * x * oneMinusC - y * s;
+	this->elements[9] = z * y * oneMinusC + x * s;
+	this->elements[10] = z * z * oneMinusC + c;
+	this->elements[11] = 0.0f;
 
-	elements[15] = 1.0f;
+	this->elements[15] = 1.0f;
 }
 
 void Mat4::transpose() {
 	for (int i = 0; i < 4; ++i) {
 		for (int j = i + 1; j < 4; ++j) {
-			std::swap(elements[i * 4 + j], elements[j * 4 + i]);
+			std::swap(this->elements[i * 4 + j], this->elements[j * 4 + i]);
 		}
 	}
 }
@@ -216,5 +216,5 @@ Mat4 Mat4::getTransposed() const {
 }
 
 const float *Mat4::data() const {
-	return elements;
+	return this->elements;
 }

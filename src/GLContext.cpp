@@ -11,6 +11,7 @@ GLContext::~GLContext() {
 
 void GLContext::terminate() {
 	glfwTerminate();
+
 }
 
 void	GLContext::init() {

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <chrono>
 #include <cmath>
+#include "BMPLoader.hpp"
 #include "Mat4.hpp"
 #include "MeshLoader.hpp"
 #include "GLContext.hpp"
@@ -31,9 +32,14 @@ int main(int argc, char** argv)
 		std::cerr << "Runtime error: " << e.what() << std::endl;
 		return -1;
 	}
-
-	Shader vertexShader(GL_VERTEX_SHADER, "assets/shaders/vertex.glsl");
-	Shader fragmentShader(GL_FRAGMENT_SHADER, "assets/shaders/fragment.glsl");
+	Texture *texture = BMPLoader::loadBMP("assets/textures/qpupier.bmp");
+	if (!texture) {
+		std::cerr << "Failed to load texture." << std::endl;
+		return -1;
+	}
+	Shader vertexShader(GL_VERTEX_SHADER, "assets/shaders/vertex/texture.glsl");
+	Shader fragmentShader(GL_FRAGMENT_SHADER, "assets/shaders/fragment/texture.glsl");
+	
 	ShaderProgram shaderProgram;
 	
 	shaderProgram.attachShader(vertexShader);
@@ -64,12 +70,12 @@ int main(int argc, char** argv)
 	GLint transformLocation = shaderProgram.getUniformLocation("transform");
 	GLint projectionLocation = shaderProgram.getUniformLocation("projection");
 	GLint viewLocation = shaderProgram.getUniformLocation("view");
-	GLint shadeCountLocation = shaderProgram.getUniformLocation("shadeCount");
+	//GLint shadeCountLocation = shaderProgram.getUniformLocation("shadeCount");
 	
 	shaderProgram.link();
 	shaderProgram.use();
-	int shadeCounts[3] = { 10, 30, 50 };
-	shaderProgram.setUniform3i(shadeCountLocation, shadeCounts[0], shadeCounts[1], shadeCounts[2]);
+	//int shadeCounts[3] = { 10, 100, 255 };
+	//shaderProgram.setUniform3i(shadeCountLocation, shadeCounts[0], shadeCounts[1], shadeCounts[2]);
 	shaderProgram.setUniformMat4(transformLocation, transform);
 	shaderProgram.setUniformMat4(projectionLocation, projectionMatrix);
 	shaderProgram.setUniformMat4(viewLocation, view);
@@ -91,4 +97,5 @@ int main(int argc, char** argv)
 		window.swapBuffers();
 		glContext.pollEvents();
 	}
+	delete texture;
 }
