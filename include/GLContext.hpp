@@ -8,7 +8,6 @@
 class GLContext
 {
 private:
-	int version;
 	Window window;
 	// Terminate the OpenGL context
 	void terminate();

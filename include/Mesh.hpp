@@ -1,31 +1,40 @@
 #ifndef MESH_HPP
 #define MESH_HPP
 
+#include "Vec3.hpp"
 #include <vector>
 #include "GLContext.hpp"
 
-typedef struct {
-	float x, y, z;
-} float3;
 
-typedef float3 Vertex;
+typedef struct {
+	struct {
+		float x, y;
+	};
+	float data[2];
+} float2;
+
+typedef struct s_vertex {
+	Vec3 position;
+} Vertex;
 
 class Mesh {
 private:
 	std::vector<Vertex> vertices;
+	std::vector<float2> texCoords;
 	std::vector<unsigned int> indices;
 
-	float3 max;
-	float3 min;
+	Vec3 max;
+	Vec3 min;
 public:
 	Mesh();
 	~Mesh();
 
-	void addVertex(float x, float y, float z);
+	void addTextureCoord(const float2 &texCoord);
+	void addVertex(const Vertex &vertex);
 	void addIndex(unsigned int index);
 	std::vector<Vertex> getVertices() const;
 	std::vector<unsigned int> getIndices() const;
-	float3 getCenter();
+	Vec3 getCenter();
 	void center();
 	
 };

@@ -30,6 +30,7 @@ set(CLASS_NAMES
 	Mat4
 	Texture
 	BMPLoader
+	Vec3
 )
 
 list(INSERT SRC_FILES 0 ${CLASS_NAMES})

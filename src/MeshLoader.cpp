@@ -19,10 +19,18 @@ Mesh MeshLoader::loadMesh(const std::string& filePath) {
 		iss >> command;
 
 		if (command == "v") { // Vertex
+			Vertex vertex;
 			float x, y, z;
 			iss >> x >> y >> z;
-			mesh.addVertex(x, y, z);
-		} else if (command == "f") { // Face
+			vertex.position = Vec3(x, y, z);
+			mesh.addVertex(vertex);
+		}
+		else if (command == "vt") { // Vertex with texture coordinates
+			float2 texCoord;
+			iss >> texCoord.x >> texCoord.y;
+			mesh.addTextureCoord(texCoord);
+		}
+		else if (command == "f") { // Face
 			unsigned int index;
 			size_t numIndices = 0;
 			unsigned int lastIndex = 0;
@@ -42,8 +50,7 @@ Mesh MeshLoader::loadMesh(const std::string& filePath) {
 				numIndices++;
 			}
 		}
-		else
-		{
+		else {
 			// Ignore other commands (e.g., normals, texture coordinates)
 			continue;
 		}
