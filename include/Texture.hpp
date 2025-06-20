@@ -11,6 +11,8 @@ public:
 	// data should be in RGBA format
 	Texture(const void* data, int width, int height, unsigned int format);
 	~Texture();
+
+	void bind(GLuint unit = 0) const;
 };
 
 #endif

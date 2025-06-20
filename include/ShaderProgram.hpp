@@ -29,6 +29,7 @@ public:
 
 	void setUniformMat4(GLint location, const Mat4 &matrix) const;
 
+	void enableVertexAttribArray(GLint index) const;
 	void vertexAttribPointer(GLint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* pointer) const;
 
 	GLuint getHandle() const;

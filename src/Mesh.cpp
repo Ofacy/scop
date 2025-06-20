@@ -25,12 +25,19 @@ void Mesh::addIndex(unsigned int index) {
 	indices.push_back(index);
 }
 
-std::vector<Vertex> Mesh::getVertices() const {
+std::vector<Vertex> &Mesh::getVertices() {
 	return vertices;
 }
 
-std::vector<unsigned int> Mesh::getIndices() const {
+std::vector<unsigned int> &Mesh::getIndices() {
 	return indices;
+}
+
+const float2& Mesh::getTexCoord(unsigned int index) const {
+	if (index < texCoords.size()) {
+		return texCoords[index];
+	}
+	throw std::out_of_range("Texture coordinate index out of range");
 }
 
 Vec3 Mesh::getCenter() {

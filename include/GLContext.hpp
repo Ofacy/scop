@@ -7,19 +7,20 @@
 
 class GLContext
 {
+	
 private:
+	static GLContext *instance;
 	Window window;
 	// Terminate the OpenGL context
 	void terminate();
-public:
 	GLContext();
+public:
+	static GLContext &getInstance();
 	~GLContext();
 
 	void	init();
-
 	Window &getWindow();
-
-	void pollEvents() const;
+	void pollEvents();
 };
 
 #endif

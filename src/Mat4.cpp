@@ -177,6 +177,14 @@ void Mat4::setTranslation(float x, float y, float z) {
 	this->elements[14] = z;
 }
 
+void Mat4::setTranslation(const Vec3 &translation) {
+	this->setTranslation(translation.getX(), translation.getY(), translation.getZ());
+}
+
+Vec3 Mat4::getTranslation() const {
+	return Vec3(this->elements[12], this->elements[13], this->elements[14]);
+}
+
 void Mat4::setRotation(float angle, float x, float y, float z) {
 	float rad = angle * M_PI / 180.0f; // Convert degrees to radians
 	float c = cos(rad);
@@ -199,6 +207,26 @@ void Mat4::setRotation(float angle, float x, float y, float z) {
 	this->elements[11] = 0.0f;
 
 	this->elements[15] = 1.0f;
+}
+
+void Mat4::setRotation(const Vec3 &rotation) {
+	// Set rotation using Euler angles
+	this->setRotation(rotation.getX(), 1.0f, 0.0f, 0.0f); // Rotate around X
+	Mat4 rotY;
+	rotY.setRotation(rotation.getY(), 0.0f, 1.0f, 0.0f); // Rotate around Y
+	*this = *this * rotY; // Combine rotations
+	Mat4 rotZ;
+	rotZ.setRotation(rotation.getZ(), 0.0f, 0.0f, 1.0f); // Rotate around Z
+	*this = *this * rotZ; // Combine rotations
+}
+
+// return the rotation as a direction vector
+Vec3 Mat4::getDirection() const {
+	Vec3 direction;
+	direction.setX(this->elements[2]);
+	direction.setY(this->elements[6]);
+	direction.setZ(this->elements[10]);
+	return direction.normalized();
 }
 
 void Mat4::transpose() {

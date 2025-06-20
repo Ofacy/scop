@@ -2,7 +2,20 @@
 #include "GLContext.hpp"
 #include <iostream>
 
+GLContext *GLContext::instance = nullptr;
+
+void glfw_error_callback(int error, const char *description) {
+	std::cerr << "GLFW Error (" << error << "): " << description << std::endl;
+}
+
 GLContext::GLContext() {
+}
+
+GLContext &GLContext::getInstance() {
+	if (!instance) {
+		instance = new GLContext();
+	}
+	return *instance;
 }
 
 GLContext::~GLContext() {
@@ -25,7 +38,9 @@ void	GLContext::init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	window.init(1920, 1080, "scop");
+	window.init(800, 600, "scop");
+
+	glfwSetErrorCallback(glfw_error_callback);
 	
 	glfwMakeContextCurrent(window.getHandle());
 	if (!gladLoadGL(glfwGetProcAddress)) {
@@ -39,6 +54,8 @@ Window &GLContext::getWindow() {
 	return this->window;
 }
 
-void GLContext::pollEvents() const {
+void GLContext::pollEvents() {
+	this->window.scrollXOffset = 0.0;
+	this->window.scrollYOffset = 0.0;
 	glfwPollEvents();
 }

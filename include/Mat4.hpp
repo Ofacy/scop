@@ -1,6 +1,8 @@
 #ifndef MAT4_HPP
 #define MAT4_HPP
 
+# include "Vec3.hpp"
+
 class Mat4 {
 private:
 	float elements[16];
@@ -22,8 +24,15 @@ public:
 	Mat4 operator/(float scalar) const;
 	void setIdentity();
 	void setZero();
+
 	void setTranslation(float x, float y, float z);
+	void setTranslation(const Vec3 &translation);
+	Vec3 getTranslation() const;
+
 	void setRotation(float angle, float x, float y, float z);
+	void setRotation(const Vec3 &rotation);
+	Vec3 getDirection() const;
+
 	void transpose();
 	Mat4 getTransposed() const;
 	void invert();

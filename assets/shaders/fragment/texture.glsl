@@ -8,5 +8,9 @@ uniform sampler2D textureSampler;
 
 void main()
 {
-	outColor = texture(textureSampler, texCoords.xy / vec2(800, 600));
+	// Sample the texture at the given texture coordinates
+	vec4 sampledColor = texture(textureSampler, texCoords);
+	
+	// Output the sampled color
+	outColor = sampledColor;
 }

@@ -6,7 +6,7 @@
 #include "GLContext.hpp"
 
 
-typedef struct {
+typedef union {
 	struct {
 		float x, y;
 	};
@@ -14,7 +14,8 @@ typedef struct {
 } float2;
 
 typedef struct s_vertex {
-	Vec3 position;
+	Vec3	position;
+	float2	texCoord;
 } Vertex;
 
 class Mesh {
@@ -32,8 +33,9 @@ public:
 	void addTextureCoord(const float2 &texCoord);
 	void addVertex(const Vertex &vertex);
 	void addIndex(unsigned int index);
-	std::vector<Vertex> getVertices() const;
-	std::vector<unsigned int> getIndices() const;
+	std::vector<Vertex> &getVertices();
+	std::vector<unsigned int> &getIndices();
+	const float2& getTexCoord(unsigned int index) const;
 	Vec3 getCenter();
 	void center();
 	

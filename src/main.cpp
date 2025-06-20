@@ -20,11 +20,10 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	Mesh mesh = MeshLoader::loadMesh(argv[1]);
-	GLContext glContext;
-	const Mat4 projectionMatrix(Mat4::perspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f));
+	GLContext &glContext = GLContext::getInstance();
+	const Mat4 projectionMatrix(Mat4::perspective(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f));
 	Mat4 transform;
-	Mat4 view = Mat4::lookAt(2.2f, 2.2f, 2.2f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
-
+	Mat4 view = Mat4::lookAt(3.2f, 3.2f, 3.2f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
 
 	try {
 		glContext.init();
@@ -32,16 +31,16 @@ int main(int argc, char** argv)
 		std::cerr << "Runtime error: " << e.what() << std::endl;
 		return -1;
 	}
-	Texture *texture = BMPLoader::loadBMP("assets/textures/qpupier.bmp");
+	Texture *texture = BMPLoader::loadBMP("assets/textures/02_-_Default_baseColor.bmp");
 	if (!texture) {
 		std::cerr << "Failed to load texture." << std::endl;
 		return -1;
 	}
 	Shader vertexShader(GL_VERTEX_SHADER, "assets/shaders/vertex/texture.glsl");
 	Shader fragmentShader(GL_FRAGMENT_SHADER, "assets/shaders/fragment/texture.glsl");
-	
+
 	ShaderProgram shaderProgram;
-	
+
 	shaderProgram.attachShader(vertexShader);
 	shaderProgram.attachShader(fragmentShader);
 	shaderProgram.link();
@@ -67,6 +66,9 @@ int main(int argc, char** argv)
 
 	GLint position = shaderProgram.getAttributeLocation("position");
 	shaderProgram.vertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+	GLint texCoord = shaderProgram.getAttributeLocation("texCoord");
+	shaderProgram.enableVertexAttribArray(texCoord);
+	shaderProgram.vertexAttribPointer(texCoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
 	GLint transformLocation = shaderProgram.getUniformLocation("transform");
 	GLint projectionLocation = shaderProgram.getUniformLocation("projection");
 	GLint viewLocation = shaderProgram.getUniformLocation("view");
@@ -79,6 +81,8 @@ int main(int argc, char** argv)
 	shaderProgram.setUniformMat4(transformLocation, transform);
 	shaderProgram.setUniformMat4(projectionLocation, projectionMatrix);
 	shaderProgram.setUniformMat4(viewLocation, view);
+	glActiveTexture(GL_TEXTURE0);
+	texture->bind();
 	
 	glEnable(GL_DEPTH_TEST);
 	auto t_start = std::chrono::high_resolution_clock::now();
@@ -86,6 +90,20 @@ int main(int argc, char** argv)
 	while (!window.shouldClose()) {
 		if (window.getKey(GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 			window.setShouldClose(true);
+		}
+		double yScroll = window.getScrollYOffset();
+		if (yScroll != 0.0) {
+			float zoomMultiplier = window.getKey(GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ? 1.0f : 0.2f;
+			float zoomFactor = static_cast<float>(yScroll) * -zoomMultiplier;
+			Vec3 translation = view.getTranslation();
+			Vec3 translationDelta = translation * zoomFactor;
+			translation += translationDelta;
+			// make sure translation is not too close to the origin or goes behind the model
+			if (translation.length() < 0.1f) {
+				translation = view.getTranslation().normalized() * 0.1f;
+			}
+			view.setTranslation(translation);
+			shaderProgram.setUniformMat4(viewLocation, view);
 		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		auto t_now = std::chrono::high_resolution_clock::now();

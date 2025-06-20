@@ -83,6 +83,13 @@ void ShaderProgram::setUniformMat4(GLint location, const Mat4 &matrix) const {
 	glUniformMatrix4fv(location, 1, GL_FALSE, matrix.data());
 }
 
+void ShaderProgram::enableVertexAttribArray(GLint index) const {
+	glEnableVertexAttribArray(index);
+	if (glGetError() != GL_NO_ERROR) {
+		throw std::runtime_error("Failed to enable vertex attribute array at index: " + std::to_string(index));
+	}
+}
+
 void ShaderProgram::vertexAttribPointer(GLint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer) const {
 	glVertexAttribPointer(index, size, type, normalized, stride, pointer);
 	glEnableVertexAttribArray(index);
