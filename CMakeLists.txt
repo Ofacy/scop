@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # to generate compile_commands.json (for clangd)
 
@@ -25,12 +25,14 @@ set(CLASS_NAMES
 	Window
 	Shader
 	ShaderProgram
+	TransformableShaderProgram
 	Mesh
 	MeshLoader
 	Mat4
 	Texture
 	BMPLoader
 	Vec3
+	Scop
 )
 
 list(INSERT SRC_FILES 0 ${CLASS_NAMES})

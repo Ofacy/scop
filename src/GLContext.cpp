@@ -38,7 +38,7 @@ void	GLContext::init() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	window.init(800, 600, "scop");
+	window.init(1920, 1080, "scop");
 
 	glfwSetErrorCallback(glfw_error_callback);
 	

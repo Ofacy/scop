@@ -35,8 +35,6 @@ public:
 
 	void transpose();
 	Mat4 getTransposed() const;
-	void invert();
-	Mat4 getInverted() const;
 
 	const float *data() const;
 };

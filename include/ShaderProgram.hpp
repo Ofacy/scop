@@ -9,11 +9,11 @@ private:
 	GLuint programHandle;
 public:
 	ShaderProgram();
-	~ShaderProgram();
+	virtual ~ShaderProgram();
 
 	void attachShader(const Shader& shader);
-	void link();
-	void use() const;
+	virtual void link();
+	virtual void use() const;
 
 	void bindFragDataLocation(const char* name, GLuint colorAttachment);
 	GLint getAttributeLocation(const char* name) const;
