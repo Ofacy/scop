@@ -33,14 +33,12 @@ Mesh MeshLoader::loadMesh(const std::string& filePath) {
 			mesh.addTextureCoord(texCoord);
 		}
 		else if (command == "f") { // Face
+			std::vector<unsigned int> indices;
 			std::string vertexParams;
-			size_t numIndecies = 0;
-			unsigned int lastIndex = 0;
-			unsigned int firstIndex = 0;
 			// TODO: handle non-triangle faces!! (again)
 			while (iss >> vertexParams) {
 				if (vertexParams.find("/") == std::string::npos) {
-					mesh.addIndex(std::stoi(vertexParams) - 1);
+					indices.push_back(std::stoi(vertexParams) - 1);
 					continue;
 				}
 				// Split the vertex parameters by '/'
@@ -49,7 +47,7 @@ Mesh MeshLoader::loadMesh(const std::string& filePath) {
 				while (std::getline(vss, vertexParam[0], '/') && std::getline(vss, vertexParam[1], '/') && std::getline(vss, vertexParam[2], '/')) {
 					// Parse the vertex index
 					unsigned int vertexIndex = std::stoi(vertexParam[0]) - 1; // OBJ indices are 1-based
-					mesh.addIndex(vertexIndex);
+					indices.push_back(vertexIndex);
 					// If texture coordinates are present, parse them
 					if (!vertexParam[1].empty()) {
 						Vertex &vertex = mesh.getVertices()[vertexIndex];
@@ -57,6 +55,15 @@ Mesh MeshLoader::loadMesh(const std::string& filePath) {
 						vertex.texCoord = mesh.getTexCoord(texCoordIndex);
 					}
 				}
+			}
+			if (indices.size() < 3) {
+				throw std::runtime_error("Invalid face index count (< 3)");
+			}
+			for (size_t i = 2; i < indices.size(); i++) {
+				std::cout << "Indices 0 " << i - 1 << " " << i << std::endl;
+				mesh.addIndex(indices[0]);
+				mesh.addIndex(indices[i - 1]);
+				mesh.addIndex(indices[i]);
 			}
 		}
 		else {
