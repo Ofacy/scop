@@ -60,7 +60,6 @@ Mesh MeshLoader::loadMesh(const std::string& filePath) {
 				throw std::runtime_error("Invalid face index count (< 3)");
 			}
 			for (size_t i = 2; i < indices.size(); i++) {
-				std::cout << "Indices 0 " << i - 1 << " " << i << std::endl;
 				mesh.addIndex(indices[0]);
 				mesh.addIndex(indices[i - 1]);
 				mesh.addIndex(indices[i]);

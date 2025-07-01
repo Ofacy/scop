@@ -34,7 +34,6 @@ Texture *BMPLoader::loadBMP(const char *filename) {
 		delete[] pixelData; // Clean up if read failed
 		return nullptr; // Could not read pixel data
 	}
-	std::cout << "BPP: " << bpp << ", Width: " << width << ", Height: " << height << std::endl;
 	Texture *texture = new Texture(pixelData, width, height, bpp == 32 ? GL_BGRA : GL_BGR);
 	delete[] pixelData; // Clean up pixel data after creating texture
 	file.close();
