@@ -23,7 +23,7 @@ void Scop::_initGPUBuffers() {
 }
 
 void Scop::_zoom(float yScroll, float zoomMultiplier) {
-	float zoomFactor = yScroll * -zoomMultiplier;
+	float zoomFactor = -yScroll * zoomMultiplier;
 	Vec3 translation = this->_viewMatrix.getTranslation();
 	Vec3 translationDelta = translation * zoomFactor;
 	translation += translationDelta;
@@ -44,11 +44,11 @@ void Scop::_nextProgram() {
 	activeProgram.setProjection(this->_projectionMatrix);
 }
 
-Scop::Scop(Mesh &mesh, bool texture) :
+Scop::Scop(Mesh &mesh, bool texture, unsigned char rgb[3]) :
 		_mesh(mesh),
 		_activeProgramIndex(0),
 		_drawMode(GL_TRIANGLES),
-		_projectionMatrix(Mat4::perspective(90.0f, 800.0f / 600.0f, 0.1f, 1000.0f)),
+		_projectionMatrix(Mat4::perspective(90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f)),
 		_viewMatrix(Mat4::lookAt(3.2f, 3.2f, 3.2f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f))
 		{
 	this->_initGPUBuffers();
@@ -65,16 +65,18 @@ Scop::Scop(Mesh &mesh, bool texture) :
 		shaderProgram.link();
 		shaderProgram.bindFragDataLocation("outColor", 0);
 		GLint position = shaderProgram.getAttributeLocation("position");
-		shaderProgram.vertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+		if (position != -1)
+			shaderProgram.vertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
 		GLint texCoord = shaderProgram.getAttributeLocation("texCoord");
-		shaderProgram.vertexAttribPointer(texCoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+		if (texCoord != -1)
+			shaderProgram.vertexAttribPointer(texCoord, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
 		shaderProgram.use();
 	}
 	else
 		this->_shaderPrograms = new TransformableShaderProgram();
 	ShaderProgram &shaderProgram = this->_shaderPrograms[0];
-	Shader vertexShader(GL_VERTEX_SHADER, "./assets/shaders/vertex/vertex.glsl");
-	Shader fragmentShader(GL_FRAGMENT_SHADER, "./assets/shaders/fragment/fragment.glsl");
+	Shader vertexShader(GL_VERTEX_SHADER, "./assets/shaders/vertex/shades.glsl");
+	Shader fragmentShader(GL_FRAGMENT_SHADER, "./assets/shaders/fragment/shades.glsl");
 
 	shaderProgram.attachShader(vertexShader);
 	shaderProgram.attachShader(fragmentShader);
@@ -83,12 +85,13 @@ Scop::Scop(Mesh &mesh, bool texture) :
 	shaderProgram.bindFragDataLocation("outColor", 0);
 	
 	GLint position = shaderProgram.getAttributeLocation("position");
-	shaderProgram.vertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+	if (position != -1)
+		shaderProgram.vertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
 	shaderProgram.use();
 	
 	GLint shadeCountLocation = shaderProgram.getUniformLocation("shadeCount");
-	shaderProgram.setUniform3i(shadeCountLocation, 255, 130, 34);
-	// use the texture shader first and initilise its uniforms
+	shaderProgram.setUniform3i(shadeCountLocation, rgb[0], rgb[1], rgb[2]);
+	// use the texture shader first and initialise its uniforms
 	this->_nextProgram();
 };
 

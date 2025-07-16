@@ -33,7 +33,7 @@ private:
 	void _nextProgram();
 
 public:
-	Scop(Mesh &mesh, bool texture);
+	Scop(Mesh &mesh, bool texture, unsigned char rgb[3]);
 
 	void 						start();
 	TransformableShaderProgram	&getActiveShaderProgram();

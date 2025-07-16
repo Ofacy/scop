@@ -51,9 +51,29 @@ Vec3 Mesh::getCenter() {
 
 void Mesh::center() {
 	Vec3 center = this->getCenter();
+	this->min -= center;
+	this->max -= center;
+	float2 scaling = {{
+		0.5f / (this->max.getZ() == 0 ? 1 : this->max.getZ()),
+		0.5f / (this->max.getY() == 0 ? 1 : this->max.getY())
+	}};
+	float2 offset = {{
+		0.5,
+		0.5
+	}};
 	for (auto &vertex : this->vertices) {
 		vertex.position -= center;
+		if (texCoords.empty()) {
+			vertex.texCoord = {{
+				vertex.position.getZ() * scaling.x + offset.x,
+				vertex.position.getY() * scaling.y + offset.y
+			}};
+		}
 	}
-	this->min = Vec3();
-	this->max = Vec3();
+}
+
+
+std::ostream &operator<<(std::ostream &stream, const float2 &values) {
+	stream << "(" << values.x << ", " << values.y << ")";
+	return stream;
 }

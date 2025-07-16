@@ -40,11 +40,7 @@ void ShaderProgram::bindFragDataLocation(const char* name, GLuint colorAttachmen
 }
 
 GLint ShaderProgram::getAttributeLocation(const char* name) const {
-	GLint location = glGetAttribLocation(programHandle, name);
-	if (location == -1) {
-		throw std::runtime_error("Attribute not found: " + std::string(name));
-	}
-	return location;
+	return glGetAttribLocation(programHandle, name);
 }
 
 GLint ShaderProgram::getUniformLocation(const char* name) const {

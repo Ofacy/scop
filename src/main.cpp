@@ -13,9 +13,10 @@ int main(int argc, char** argv)
 {
 	char	*mesh_path = NULL;
 	char	*texture_path = NULL;
+	unsigned char rgb[3] = {255, 130, 34};
 
 	if (argc < 2) {
-		std::cerr << "Usage: " << argv[0] << " [-t <texture_path.bmp>] <mesh_file>" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " [-t <texture_path.bmp>] [-s <r> <g> <b>] <mesh_file>" << std::endl;
 		return -1;
 	}
 	while (*(++argv)) {
@@ -27,6 +28,16 @@ int main(int argc, char** argv)
 				return 1;
 			}
 		}
+		else if (arg == "-s") {
+			for (unsigned char i = 0;i < 3; i++) {
+				const char *str = *(++argv);
+				if (!str) {
+					std::cerr << "Missing values for parameter '-s'" << std::endl;
+					return 1;
+				}
+				rgb[i] = std::atoi(str);
+			}
+		}
 		else {
 			if (mesh_path) {
 				std::cerr << "Cannot specify more than one OBJ file!" << std::endl;
@@ -36,7 +47,7 @@ int main(int argc, char** argv)
 		}
 	}
 	if (!mesh_path) {
-		std::cerr << "OBJ file needed!" << std::endl;
+		std::cerr << "OBJ file required!" << std::endl;
 		return 1;
 	}
 	Mesh mesh = MeshLoader::loadMesh(mesh_path);
@@ -60,7 +71,7 @@ int main(int argc, char** argv)
 		}
 	}
 	glEnable(GL_DEPTH_TEST);
-	Scop scop(mesh, texture ? true : false);
+	Scop scop(mesh, texture ? true : false, rgb);
 	scop.start();
 	delete texture;
 }
