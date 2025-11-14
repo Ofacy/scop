@@ -39,7 +39,7 @@ public:
 
 	void 						start();
 	TransformableShaderProgram	&getActiveShaderProgram();
-	TransformableShaderProgram	&getLastActiveShaderProgram();
+	TransformableShaderProgram	&getPreviousActiveShaderProgram();
 };
 
 #endif

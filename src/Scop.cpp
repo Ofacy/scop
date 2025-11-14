@@ -142,13 +142,16 @@ void Scop::start() {
 		this->_transformMatrix.setRotation(time * 30.0f, 0.0f, 1.0f, 0.0f);
 
 		TransformableShaderProgram &activeProgram = this->getActiveShaderProgram();
-		TransformableShaderProgram &previouslyActiveProgram = this->getLastActiveShaderProgram();
+		TransformableShaderProgram &previouslyActiveProgram = this->getPreviousActiveShaderProgram();
 		
 		// blend
+		// takes 1 second:
+		// first 500ms make initial shader fade out
+		// remaning fades the new shader in
 		float lastChangeDiff = time - this->_lastProgramChange;
 		if (lastChangeDiff < 0.5) {
 			glEnable(GL_BLEND);
-			glBlendColor(1, 1, 1, lastChangeDiff * 2.0f); // from 0.0 to 1.0 in 0.5s
+			glBlendColor(1, 1, 1, lastChangeDiff * 2.0f);
 			glBlendFunc(GL_ONE_MINUS_CONSTANT_ALPHA, GL_CONSTANT_ALPHA);
 			previouslyActiveProgram.use();
 			previouslyActiveProgram.setTransform(this->_transformMatrix);
@@ -174,6 +177,6 @@ TransformableShaderProgram &Scop::getActiveShaderProgram() {
 	return this->_shaderPrograms[this->_activeProgramIndex];
 }
 
-TransformableShaderProgram &Scop::getLastActiveShaderProgram() {
+TransformableShaderProgram &Scop::getPreviousActiveShaderProgram() {
 	return this->_shaderPrograms[this->_previousActiveProgramIndex];
 }
