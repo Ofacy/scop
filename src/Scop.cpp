@@ -147,7 +147,6 @@ void Scop::start() {
 		// blend
 		float lastChangeDiff = time - this->_lastProgramChange;
 		if (lastChangeDiff < 0.5) {
-			std::cout << "lastChangeDiff: " << lastChangeDiff << std::endl;
 			glEnable(GL_BLEND);
 			glBlendColor(1, 1, 1, lastChangeDiff * 2.0f); // from 0.0 to 1.0 in 0.5s
 			glBlendFunc(GL_ONE_MINUS_CONSTANT_ALPHA, GL_CONSTANT_ALPHA);
@@ -157,7 +156,6 @@ void Scop::start() {
 			activeProgram.use();
 		}
 		else if (lastChangeDiff < 1.0) {
-			std::cout << "lastChangeDiff2: " << lastChangeDiff << std::endl;
 			glEnable(GL_BLEND);
 			glBlendColor(1, 1, 1, (lastChangeDiff - 0.5f) * 2.0f);
 			glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
