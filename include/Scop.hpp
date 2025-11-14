@@ -20,7 +20,9 @@ private:
 
 	TransformableShaderProgram	*_shaderPrograms;
 	size_t						_shaderProgramCount;
+	size_t						_previousActiveProgramIndex;
 	size_t						_activeProgramIndex;
+	float						_lastProgramChange;
 	GLenum						_drawMode;
 
 	const Mat4				_projectionMatrix;
@@ -37,6 +39,7 @@ public:
 
 	void 						start();
 	TransformableShaderProgram	&getActiveShaderProgram();
+	TransformableShaderProgram	&getLastActiveShaderProgram();
 };
 
 #endif
