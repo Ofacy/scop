@@ -63,6 +63,10 @@ void ShaderProgram::setUniform1i(GLint location, int value) const {
 	glUniform1i(location, value);
 }
 
+void ShaderProgram::setUniform2i(GLint location, int v0, int v1) const {
+	glUniform2i(location, v0, v1);
+}
+
 void ShaderProgram::setUniform3f(GLint location, float v0, float v1, float v2) const {
 	glUniform3f(location, v0, v1, v2);
 }

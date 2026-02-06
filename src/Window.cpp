@@ -7,14 +7,16 @@ void glfw_scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	GLContext &glContext = GLContext::getInstance();
 	Window &win = glContext.getWindow();
 	if (win.getHandle() == window) {
-		win.scrollXOffset += xoffset;
-		win.scrollYOffset += yoffset;
+		win._scrollXOffset += xoffset;
+		win._scrollYOffset += yoffset;
 	} else {
 		std::cerr << "Scroll callback received for a different window." << std::endl;
 	}
 }
 
-Window::Window() : window(nullptr) {
+Window::Window(int width, int height) : window(nullptr) {
+	this->_width = width;
+	this->_height = height;
 }
 
 Window::Window(GLFWwindow* win) : window(win) {
@@ -36,9 +38,9 @@ Window& Window::operator=(const Window& other) {
 	return *this;
 }
 
-void Window::init(int width, int height, const char* title) {
+void Window::init(const char* title) {
 	if (!this->window) {
-		this->window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+		this->window = glfwCreateWindow(this->_width, this->_height, title, nullptr, nullptr);
 		if (!this->window) {
 			throw std::runtime_error("Failed to create GLFW window");
 		}
@@ -100,9 +102,17 @@ void Window::setCursorPos(double xpos, double ypos) const {
 }
 
 double Window::getScrollXOffset() const {
-	return this->scrollXOffset;
+	return this->_scrollXOffset;
 }
 
 double Window::getScrollYOffset() const {
-	return this->scrollYOffset;
+	return this->_scrollYOffset;
+}
+
+int Window::getWidth() const {
+	return this->_width;
+}
+
+int Window::getHeight() const {
+	return this->_height;
 }

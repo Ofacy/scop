@@ -1,7 +1,7 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 
@@ -13,17 +13,19 @@ private:
 	friend class GLContext;
 
 protected:
-	double scrollXOffset = 0.0;
-	double scrollYOffset = 0.0;
+	double _scrollXOffset = 0.0;
+	double _scrollYOffset = 0.0;
+	int _width;
+	int _height;
 
 public:
-	Window();
+	Window(int width, int height);
 	Window(GLFWwindow* win);
 	~Window();
 	
 	Window &operator=(const Window &other);
 
-	void init(int width, int height, const char* title);
+	void init(const char* title);
 
 	GLFWwindow* getHandle() const;
 
@@ -38,6 +40,9 @@ public:
 
 	double getScrollXOffset() const;
 	double getScrollYOffset() const;
+
+	int getWidth() const;
+	int getHeight() const;
 };
 
 #endif

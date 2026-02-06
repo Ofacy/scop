@@ -66,12 +66,11 @@ int main(int argc, char** argv)
 			return -1;
 		}
 		else {
-			glActiveTexture(GL_TEXTURE0);
 			texture->bind();
 		}
 	}
 	glEnable(GL_DEPTH_TEST);
-	Scop scop(mesh, texture ? true : false, rgb);
+	Scop scop(mesh, texture, rgb);
 	scop.start();
 	delete texture;
 }

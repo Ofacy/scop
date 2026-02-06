@@ -27,6 +27,8 @@ public:
 	void setUniform3i(GLint location, int v0, int v1, int v2) const;
 	void setUniform3u(GLint location, unsigned int v0, unsigned int v1, unsigned int v2) const;
 
+	void setUniform2i(GLint location, int v0, int v1) const;
+
 	void setUniformMat4(GLint location, const Mat4 &matrix) const;
 
 	void enableVertexAttribArray(GLint index) const;
