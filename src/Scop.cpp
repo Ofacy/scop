@@ -213,6 +213,7 @@ void Scop::start() {
 		if (lastChangeDiff < 1.0) {
 			previouslyActiveProgram.use();
 			previouslyActiveProgram.setTransform(this->_transformMatrix);
+			previouslyActiveProgram.setView(this->_viewMatrix);
 			glBindFramebuffer(GL_FRAMEBUFFER, this->_fbos[0]);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glDrawElements(this->_drawMode, this->_mesh.getIndices().size(), GL_UNSIGNED_INT, nullptr);
