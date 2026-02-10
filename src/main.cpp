@@ -50,27 +50,27 @@ int main(int argc, char** argv)
 		std::cerr << "OBJ file required!" << std::endl;
 		return 1;
 	}
-	Mesh mesh = MeshLoader::loadMesh(mesh_path);
-	GLContext &glContext = GLContext::getInstance();
-	try {
-		glContext.init();
-	} catch (const std::runtime_error& e) {
-		std::cerr << "Runtime error: " << e.what() << std::endl;
-		return -1;
-	}
 	Texture *texture = nullptr;
-	if (texture_path) {
-		texture = BMPLoader::loadBMP(texture_path);
-		if (!texture) {
-			std::cerr << "Failed to load texture." << std::endl;
-			return -1;
+	try {
+		Mesh mesh = MeshLoader::loadMesh(mesh_path);
+		GLContext &glContext = GLContext::getInstance();
+		glContext.init();
+		if (texture_path) {
+			texture = BMPLoader::loadBMP(texture_path);
+			if (!texture) {
+				std::cerr << "Failed to load texture " << texture_path << std::endl;
+				return -1;
+			}
+			else {
+				texture->bind();
+			}
 		}
-		else {
-			texture->bind();
-		}
+		glEnable(GL_DEPTH_TEST);
+		Scop scop(mesh, texture, rgb);
+		scop.start();
 	}
-	glEnable(GL_DEPTH_TEST);
-	Scop scop(mesh, texture, rgb);
-	scop.start();
+	catch (const std::exception &e) {
+		std::cerr << "Error: " << e.what() << std::endl;
+	}
 	delete texture;
 }
