@@ -3,3 +3,4 @@ build_macos
 build_windows
 build
 scop
+obj

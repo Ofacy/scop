@@ -10,65 +10,43 @@
 #                                                                              #
 # **************************************************************************** #
 
-CXX = c++
+C = cc
 
-CXXFLAGS = -Wall -Wextra -Werror -MMD -MP -g3
+CFLAGS = -Wall -Wextra -Werror -MMD -MP -g3
 
 SRCS_DIR = src
 
-SRCS =	main.cpp \
-	GLContext.cpp \
-	Window.cpp \
-	Shader.cpp \
-	ShaderProgram.cpp \
-	TransformableShaderProgram.cpp \
-	TransitionShaderProgram.cpp \
-	Mesh.cpp \
-	MeshLoader.cpp \
-	Mat4.cpp \
-	Texture.cpp \
-	BMPLoader.cpp \
-	Vec3.cpp \
-	Scop.cpp
+SRCS =	glad.c
 
 OUTDIR = obj
 
-OBJ = $(SRCS:%.cpp=$(OUTDIR)/%.o)
+OBJ = $(SRCS:%.c=$(OUTDIR)/%.o)
 
 DEP = $(OBJ:%.o=%.d)
 
-INCLUDE = include ext/glad/include
+INCLUDE = include
 
-NAME = scop
-
-GLAD = ext/glad/glad.a
+NAME = glad.a
 
 .PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJ) $(GLAD)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ) $(GLAD) -lglfw
+$(NAME): $(OBJ)
+	$(AR) rcs $(NAME) $(OBJ)
 
-$(OUTDIR)/%.o: $(SRCS_DIR)/%.cpp
+$(OUTDIR)/%.o: $(SRCS_DIR)/%.c
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(INCLUDE:%=-I %) -o $@ -c $<
-
-$(GLAD):
-	make -C ext/glad
+	$(C) $(CFLAGS) $(INCLUDE:%=-I %) -o $@ -c $<
 
 .PHONY: clean
 clean:
 	rm -rf $(OUTDIR)
-	make -C ext/glad clean
 
 .PHONY: fclean
 fclean: clean
-	rm -f $(NAME) $(GLAD)
+	rm -f $(NAME)
 
 .PHONY: re
 re: fclean $(NAME)
-
-.PHONY: FORCE
-FORCE:
 
 -include $(DEP)
