@@ -99,6 +99,21 @@ void Scop::_nextProgram() {
 	activeProgram.setProjection(this->_projectionMatrix);
 }
 
+void Scop::_handleMovement(Window &window, float deltaTime) {
+	float moveSpeed = 0.1f * deltaTime;
+	Vec3 translation = this->_viewMatrix.getTranslation();
+	if (window.getKey(GLFW_KEY_W) == GLFW_PRESS)
+		translation += Vec3(0.0f, 0.0f, moveSpeed);
+	if (window.getKey(GLFW_KEY_S) == GLFW_PRESS)
+		translation += Vec3(0.0f, 0.0f, -moveSpeed);
+	if (window.getKey(GLFW_KEY_A) == GLFW_PRESS)
+		translation += Vec3(moveSpeed, 0.0f, 0.0f);
+	if (window.getKey(GLFW_KEY_D) == GLFW_PRESS)
+		translation += Vec3(-moveSpeed, 0.0f, 0.0f);
+	this->_viewMatrix.setTranslation(translation);
+	this->getActiveShaderProgram().setView(this->_viewMatrix);
+}
+
 Scop::Scop(Mesh &mesh, Texture *texture, unsigned char rgb[3]) :
 		_mesh(mesh),
 		_activeProgramIndex(0),
@@ -180,6 +195,7 @@ void Scop::start() {
 	Window& window = glContext.getWindow();
 	int oldShaderKeyState = GLFW_RELEASE;
 	this->_lastProgramChange = 0;
+	float lastFrameTime = 0.0f;
 	while (!window.shouldClose()) {
 		auto t_now = std::chrono::high_resolution_clock::now();
 		float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
@@ -188,7 +204,8 @@ void Scop::start() {
 		if (window.getKey(GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			window.setShouldClose(true);
 
-		int currentShaderKeyState = window.getKey(GLFW_KEY_S);
+		this->_handleMovement(window, lastFrameTime);
+		int currentShaderKeyState = window.getKey(GLFW_KEY_P);
 		if (currentShaderKeyState == GLFW_PRESS && currentShaderKeyState != oldShaderKeyState) {
 			this->_nextProgram();
 			this->_lastProgramChange = time;
@@ -204,10 +221,9 @@ void Scop::start() {
 		// apply rotation
 		this->_transformMatrix.setRotation(time * 30.0f, 0.0f, 1.0f, 0.0f);
 
+		float lastChangeDiff = time - this->_lastProgramChange;
 		TransformableShaderProgram &activeProgram = this->getActiveShaderProgram();
 		TransformableShaderProgram &previouslyActiveProgram = this->getPreviousActiveShaderProgram();
-		
-		float lastChangeDiff = time - this->_lastProgramChange;
 
 		if (lastChangeDiff < 1.0) {
 			previouslyActiveProgram.use();
@@ -239,6 +255,7 @@ void Scop::start() {
 
 		window.swapBuffers();
 		glContext.pollEvents();
+		lastFrameTime = time;
 	}
 }
 

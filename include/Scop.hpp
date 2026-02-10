@@ -41,6 +41,8 @@ private:
 	void _zoom(float yScroll, float zoomMultiplier);
 	void _nextProgram();
 
+	void _handleMovement(Window &window, float deltaTime);
+
 public:
 	Scop(Mesh &mesh, Texture *texture, unsigned char rgb[3]);
 	~Scop();
