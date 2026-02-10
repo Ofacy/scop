@@ -38,7 +38,6 @@ void Scop::_initGPUBuffers() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->_frameTextures[i], 0);
-		// TEXTURE0 is the image passed by user
 	}
 	for (int i = 0; i < 2; i++) {
 		glActiveTexture(GL_TEXTURE0 + this->_frameTextureOffset + 2 + i);
@@ -46,7 +45,7 @@ void Scop::_initGPUBuffers() {
 
 		glBindTexture(GL_TEXTURE_2D, this->_frameTextures[i + 2]);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, window.getWidth(), window.getHeight(), 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, this->_frameTextures[i + 2], 0);  
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, this->_frameTextures[i + 2], 0);
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

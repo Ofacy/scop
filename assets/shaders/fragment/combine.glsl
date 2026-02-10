@@ -12,8 +12,6 @@ void main()
 	vec2 textureCoord = gl_FragCoord.xy / vec2(windowSize.xy);
 	vec3 firstColor = texture(firstSampler, textureCoord).xyz;
 	vec3 secondColor = texture(secondSampler, textureCoord).xyz;
-    //outColor = vec4(textureCoord, 0,
-    //                1.0);
     outColor = vec4(secondColor * transition + firstColor * (1 - transition),
                     1.0);
 }
