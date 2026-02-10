@@ -110,6 +110,10 @@ void Scop::_handleMovement(Window &window, float deltaTime) {
 		translation += Vec3(moveSpeed, 0.0f, 0.0f);
 	if (window.getKey(GLFW_KEY_D) == GLFW_PRESS)
 		translation += Vec3(-moveSpeed, 0.0f, 0.0f);
+	if (window.getKey(GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		translation += Vec3(0.0f, moveSpeed, 0.0f);
+	if (window.getKey(GLFW_KEY_SPACE) == GLFW_PRESS)
+		translation += Vec3(0.0f, -moveSpeed, 0.0f);
 	this->_viewMatrix.setTranslation(translation);
 	this->getActiveShaderProgram().setView(this->_viewMatrix);
 }
