@@ -210,9 +210,11 @@ void Scop::start() {
 
 		this->_handleMovement(window, lastFrameTime);
 		int currentShaderKeyState = window.getKey(GLFW_KEY_P);
-		if (currentShaderKeyState == GLFW_PRESS && currentShaderKeyState != oldShaderKeyState) {
+		float lastChangeDiff = time - this->_lastProgramChange;
+		if (currentShaderKeyState == GLFW_PRESS && currentShaderKeyState != oldShaderKeyState && lastChangeDiff > 1.0) {
 			this->_nextProgram();
 			this->_lastProgramChange = time;
+			lastChangeDiff = time - this->_lastProgramChange;
 		}
 		oldShaderKeyState = currentShaderKeyState;
 
@@ -225,7 +227,6 @@ void Scop::start() {
 		// apply rotation
 		this->_transformMatrix.setRotation(time * 30.0f, 0.0f, 1.0f, 0.0f);
 
-		float lastChangeDiff = time - this->_lastProgramChange;
 		TransformableShaderProgram &activeProgram = this->getActiveShaderProgram();
 		TransformableShaderProgram &previouslyActiveProgram = this->getPreviousActiveShaderProgram();
 
