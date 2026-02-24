@@ -87,65 +87,35 @@ Vec3 Vec3::cross(const Vec3 &other) const {
 }
 
 Vec3& Vec3::operator+=(const Vec3 &other) {
-	x += other.x;
-	y += other.y;
-	z += other.z;
-	return *this;
+	return *this = *this + other;
 }
 
 Vec3& Vec3::operator-=(const Vec3 &other) {
-	x -= other.x;
-	y -= other.y;
-	z -= other.z;
-	return *this;
+	return *this = *this - other;
 }
 
 Vec3& Vec3::operator*=(const Vec3 &other) {
-	x *= other.x;
-	y *= other.y;
-	z *= other.z;
-	return *this;
+	return *this = *this * other;
 }
 
 Vec3& Vec3::operator/=(const Vec3 &other) {
-	if (other.x == 0.0f || other.y == 0.0f || other.z == 0.0f) {
-		throw std::runtime_error("Division by zero in Vec3 division");
-	}
-	x /= other.x;
-	y /= other.y;
-	z /= other.z;
-	return *this;
+	return *this = *this / other;
 }
 
 Vec3& Vec3::operator+=(const float &value) {
-	x += value;
-	y += value;
-	z += value;
-	return *this;
+	return *this = *this + value;
 }
 
 Vec3& Vec3::operator-=(const float &value) {
-	x -= value;
-	y -= value;
-	z -= value;
-	return *this;
+	return *this = *this - value;
 }
 
 Vec3& Vec3::operator*=(const float &value) {
-	x *= value;
-	y *= value;
-	z *= value;
-	return *this;
+	return *this = *this * value;
 }
 
 Vec3& Vec3::operator/=(const float &value) {
-	if (value == 0.0f) {
-		throw std::runtime_error("Division by zero in Vec3 division");
-	}
-	x /= value;
-	y /= value;
-	z /= value;
-	return *this;
+	return *this = *this / value;
 }
 
 float Vec3::length() const {
@@ -169,9 +139,7 @@ Vec3& Vec3::normalize() {
 	if (len == 0.0f) {
 		throw std::runtime_error("Cannot normalize a zero-length vector");
 	}
-	x /= len;
-	y /= len;
-	z /= len;
+	*this /= len;
 	return *this;
 }
 
